@@ -31,6 +31,9 @@ class Menu extends React.Component {
 					<li>
 						<Link to="demo7">Demo 7</Link> - Snap to grid
 					</li>
+					<li>
+						<Link to="Flow">Flow</Link> - Flow Example App
+					</li>
 				</ul>
 			</div>
 		);
