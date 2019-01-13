@@ -2,11 +2,15 @@ import { NodeModel } from 'storm-react-diagrams';
 import { DiamondPortModel } from './DiamondPortModel';
 
 export class DiamondNodeModel extends NodeModel {
-	constructor() {
+	name: string;
+	color: string;
+	ports:  {[s: string]:DiamondPortModel};
+
+	constructor(name: string = 'Untitled',color: string = 'rgb(0,192,255)') {
 		super('diamond');
-		this.addPort(new DiamondPortModel('top'));
-		this.addPort(new DiamondPortModel('left'));
-		this.addPort(new DiamondPortModel('bottom'));
-		this.addPort(new DiamondPortModel('right'));
+		this.name = name;
+		this.color = color;
+		this.addPort(new DiamondPortModel('In',true,name));
+		this.addPort(new DiamondPortModel('Out'));
 	}
 }

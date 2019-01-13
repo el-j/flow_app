@@ -4,7 +4,8 @@ import { PortWidget } from 'storm-react-diagrams';
 
 export interface DiamonNodeWidgetProps {
 	node: DiamondNodeModel,
-	size?: number
+	size?: number,
+	name: string
 }
 
 export interface DiamonNodeWidgetState {}
@@ -17,24 +18,26 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 	createMarkup() {
 		return {
 			__html:
-				'<g id="Layer_1"></g><g id="Layer_2"><polygon points="10,' +
-				this.props.size / 2 +
+				'<g id="Layer_1"></g><g id="Layer_2"><polygon points="0,' +
+				0 +
 				' ' +
-				this.props.size / 2 +
-				',10 ' +
-				(this.props.size - 10) +
-				',' +
-				this.props.size / 2 +
+				0 +
+				','+
+				this.props.size +
 				' ' +
-				this.props.size / 2 +
+				this.props.size +
 				',' +
-				(this.props.size - 10) +
+				this.props.size +
+				' ' +
+				this.props.size +
+				',' +
+				0 +
 				'" fill="purple" stroke="#000000" stroke-width="3" stroke-miterlimit="10"/>' +
 				'<text x=' +
 				(this.props.size / 2 - 33) +
 				' y=' +
 				(this.props.size / 2 + 5) +
-				'>Diamond</text></g>'
+				'>'+this.props.node.name +'</text></g>'
 		};
 	}
 	render() {
@@ -45,10 +48,7 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 			>
 				<svg width="150" height="150" dangerouslySetInnerHTML={this.createMarkup()} />
 				<div style={{ position: 'absolute', zIndex: 10, left: -8, top: this.props.size / 2 - 8 }}>
-					<PortWidget name="left" node={this.props.node} />
-				</div>
-				<div style={{ position: 'absolute', zIndex: 10, left: this.props.size / 2 - 8, top: -8 }}>
-					<PortWidget name="top" node={this.props.node} />
+					<PortWidget name="In" node={this.props.node} />
 				</div>
 				<div
 					style={{
@@ -58,26 +58,17 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 						top: this.props.size / 2 - 8
 					}}
 				>
-					<PortWidget name="right" node={this.props.node} />
-				</div>
-				<div
-					style={{
-						position: 'absolute',
-						zIndex: 10,
-						left: this.props.size / 2 - 8,
-						top: this.props.size - 8
-					}}
-				>
-					<PortWidget name="bottom" node={this.props.node} />
+					<PortWidget name="Out" node={this.props.node} />
 				</div>
 			</div>
 		);
 	}
 }
 
+
 DiamonNodeWidget.defaultProps = {
 	size: 150,
-	node: null
+	node: null,
+	name: "a Name"
 };
-
 export var DiamonNodeWidgetFactory = React.createFactory(DiamonNodeWidget);
