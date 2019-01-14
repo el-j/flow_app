@@ -7,12 +7,14 @@ import './addBar.css';
 // 	console.log('hello');
 // }
 
-const ProEnv = (props) => {
 
+const ProEnv = (props) => {
+	// console.log(props);
 		return (
-			<div className="addBarFrame">
-				<input type="text" name="name" value={this.value} placeholder="Add new Block from fzz" />
-				<button onClick={props.addNewBlock()}>
+			<div className="addBarFrame" style={{top: props.pos.y,left: props.pos.x}}>
+			  <input type="text" name="name" placeholder="Add new Block from fzz" value={props.inputValue} onChange={evt => props.updateInputValue(evt)}/>
+
+				<button onClick={event => props.addNewBlock(event)}>
 					<div>
 						<label>
 						Add NEW
