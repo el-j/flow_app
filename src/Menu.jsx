@@ -34,6 +34,9 @@ class Menu extends React.Component {
 					<li>
 						<Link to="Flow">Flow</Link> - Flow Example App
 					</li>
+					<li>
+						<Link to="proEnv">production dev</Link> - production env
+					</li>
 				</ul>
 			</div>
 		);
