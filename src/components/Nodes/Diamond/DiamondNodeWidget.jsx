@@ -23,7 +23,7 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 		return(
 		this.props.node.data.map((data,key) => {
 				if ( key % 2 === 0) {
-					console.log(key, key % 2);
+					// console.log(key, key % 2);
 					return(
 				<div
 						key = {key}
@@ -87,13 +87,13 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 			>
 				<svg width="150" height="150" dangerouslySetInnerHTML={this.createMarkup()} />
 				{this.makeConnectors()}
-				// {console.log(this.props.node.ports)}
 
 			</div>
 		);
 	}
 }
 
+// {console.log(this.props.node.ports)}
 
 DiamonNodeWidget.defaultProps = {
 	size: 150,
