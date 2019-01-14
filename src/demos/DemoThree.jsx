@@ -10,10 +10,10 @@ import {
 	LinkModel
 } from 'storm-react-diagrams';
 
-import { DiamondNodeModel } from './components/Nodes/Diamond/DiamondNodeModel';
-import { DiamondWidgetFactory } from './components/Nodes/Diamond/DiamondWidgetFactory';
+import { DiamondNodeModel } from '../components/Nodes/Diamond/DiamondNodeModel';
+import { DiamondWidgetFactory } from '../components/Nodes/Diamond/DiamondWidgetFactory';
 
-import './srd.css';
+import '../srd.css';
 
 class DemoThree extends React.Component {
 	componentWillMount() {

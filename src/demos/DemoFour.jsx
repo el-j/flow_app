@@ -10,14 +10,14 @@ import {
 	LinkModel
 } from 'storm-react-diagrams';
 
-import './srd.css';
+import '../srd.css';
 
-class DemoOne extends React.Component {
+class DemoFour extends React.Component {
 	componentWillMount() {
-		this.engine = new DiagramEngine();
+		let engine = new DiagramEngine();
 
-		this.engine.registerNodeFactory(new DefaultNodeFactory());
-		this.engine.registerLinkFactory(new DefaultLinkFactory());
+		engine.registerNodeFactory(new DefaultNodeFactory());
+		engine.registerLinkFactory(new DefaultLinkFactory());
 
 		const model = new DiagramModel();
 
@@ -39,15 +39,23 @@ class DemoOne extends React.Component {
 		model.addNode(node2);
 		model.addLink(link1);
 
-		this.engine.setDiagramModel(model);
+		engine.setDiagramModel(model);
+
+		model.setLocked(true);
+		this.props = {
+			diagramEngine: engine,
+			allowLooseLinks: false,
+			allowCanvasTranslation: false,
+			allowCanvasZoom: false
+		};
 	}
 	render() {
 		return (
 			<div>
-				<DiagramWidget diagramEngine={this.engine} />
+				<DiagramWidget {...this.props} />
 			</div>
 		);
 	}
 }
 
-export default DemoOne;
+export default DemoFour;

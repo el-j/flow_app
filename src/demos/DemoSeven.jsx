@@ -10,16 +10,19 @@ import {
 	LinkModel
 } from 'storm-react-diagrams';
 
-import './srd.css';
+import '../srd.css';
 
-class DemoFour extends React.Component {
+class DemoSeven extends React.Component {
 	componentWillMount() {
-		let engine = new DiagramEngine();
+		this.engine = new DiagramEngine();
 
-		engine.registerNodeFactory(new DefaultNodeFactory());
-		engine.registerLinkFactory(new DefaultLinkFactory());
+		this.engine.registerNodeFactory(new DefaultNodeFactory());
+		this.engine.registerLinkFactory(new DefaultLinkFactory());
 
 		const model = new DiagramModel();
+
+		// Set the grid size HERE!
+		model.setGridSize(50);
 
 		const node1 = new DefaultNodeModel('Node 1', 'rgb(0,192,255)');
 		const port1 = node1.addPort(new DefaultPortModel(false, 'out-1', 'Out'));
@@ -39,23 +42,15 @@ class DemoFour extends React.Component {
 		model.addNode(node2);
 		model.addLink(link1);
 
-		engine.setDiagramModel(model);
-
-		model.setLocked(true);
-		this.props = {
-			diagramEngine: engine,
-			allowLooseLinks: false,
-			allowCanvasTranslation: false,
-			allowCanvasZoom: false
-		};
+		this.engine.setDiagramModel(model);
 	}
 	render() {
 		return (
 			<div>
-				<DiagramWidget {...this.props} />
+				<DiagramWidget diagramEngine={this.engine} />
 			</div>
 		);
 	}
 }
 
-export default DemoFour;
+export default DemoSeven;
