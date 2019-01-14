@@ -20,6 +20,7 @@ import { DiamondNodeModel } from './components/Nodes/Diamond/DiamondNodeModel';
 import { DiamondPortModel } from './components/Nodes/Diamond/DiamondPortModel';
 import { DiamondWidgetFactory } from './components/Nodes/Diamond/DiamondWidgetFactory';
 
+import ProEnv from './ProEnv'
 
 import './srd.css';
 
@@ -37,6 +38,8 @@ class Flow extends React.Component {
     super(props);
     this.state = {
       data: {},
+			addNew: false,
+			notSvg: false
     };
   }
 
@@ -58,44 +61,63 @@ class Flow extends React.Component {
 		)
 	}
 
+	addNewBlock(event){
+					console.log("yes we add new block now");
+					// event.preventDefault()
+					var nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
+					var node = null;
+					console.log(this.state.data);
+					node = new DiamondNodeModel('Node ' + (nodesCount + 1), 'rgb(255,0,255)',this.state.data);
+					for (var i = 0; i < this.state.data.length; i++) {
+						if (i % 2 === 0) {
+							node.addPort(new DiamondPortModel('in-'+i, 'In'));
+						}
+						else {
+							node.addPort(new DiamondPortModel('out-'+i, 'Out'));
+						}
+					}
+					var points = this.engine.getRelativeMousePoint(event);
+					node.x = points.x;
+					node.y = points.y;
+					this.engine.getDiagramModel().addNode(node);
+					this.forceUpdate();
+	}
 
-	handleClick(event){
-
-		this.getData(url)
-		event.preventDefault()
+	testSvg(event){
 		let test
 		test = event.target.tagName
-		if (test === "svg") {
-			console.log(test);
-			test = "bla"
-			var nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
-			var node = null;
-			console.log(this.state.data);
-			node = new DiamondNodeModel('Node ' + (nodesCount + 1), 'rgb(255,0,255)',this.state.data);
-			for (var i = 0; i < this.state.data.length; i++) {
-				if (i % 2 === 0) {
-					node.addPort(new DiamondPortModel('in-'+i, 'In'));
-				}
-				else {
-					node.addPort(new DiamondPortModel('out-'+i, 'Out'));
-				}
-			}
-			var points = this.engine.getRelativeMousePoint(event);
-			node.x = points.x;
-			node.y = points.y;
-			this.engine.getDiagramModel().addNode(node);
-			this.forceUpdate();
+		switch (test) {
+			case "svg":
+				this.setState({notSvg:false, addNew:true})
+				// console.log("case svg:",  test, '    notSvg:', this.state.notSvg, '    addNew:', this.state.addNew);
+				break;
+
+			case "INPUT":
+				this.setState({notSvg:false, addNew:true})
+				// console.log("case INPUT:",  test, '    notSvg:', this.state.notSvg, '    addNew:', this.state.addNew);
+				break;
+
+			case "LABEL":
+				this.setState({notSvg:true, addNew:true})
+				// console.log("case LABEL:",  test, '    notSvg:', this.state.notSvg, '    addNew:', this.state.addNew);
+				break;
+
+			default:
+				this.setState({notSvg:false, addNew:false})
+				// console.log("case default:",  test, '    notSvg:', this.state.notSvg, '    addNew:', this.state.addNew);
 		}
-		else {
-			console.log("no svg", event);
-		}
+
+	}
+	handleClick(event){
+		event.preventDefault()
+		this.testSvg(event)
 	}
 	render() {
 		return (
-			<div className="content" >
+			<div className="content" onClick={event => this.handleClick(event)}>
+			{this.state.addNew && !this.state.notSvg ? <ProEnv addNewBlock={event => this.addNewBlock(event)}/> : null}
 				<div
 					className="diagram-layer"
-					onClick={event => this.handleClick(event)}
 					onDragOver={event => {
 						event.preventDefault();
 					}}
@@ -106,5 +128,6 @@ class Flow extends React.Component {
 		);
 	}
 }
+// {console.log(ProEnv, this.state.addNew)}
 
 export default Flow;

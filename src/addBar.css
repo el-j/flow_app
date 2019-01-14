@@ -1,0 +1,112 @@
+.addBarFrame {
+  position: absolute;
+  z-index: 5000;
+  width: 300px;
+  height: 64px;
+  background-color: rgb(218, 218, 218);
+}
+
+input {
+  margin-left: 4px;
+  padding-left: 4px;
+  padding-top: 0;
+  padding-bottom: 0;
+  height: 48px;
+  width: 228px;
+  position: relative;
+  border: none;
+  /* top: 8px; */
+}
+
+button {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  width: 64px;
+  right: 0;
+  height: 64px;
+  background-color: #CCCBCC;
+}
+
+button > div {
+  width: 48px;
+  height: 44px;
+  margin: 8px;
+  border-bottom: solid 4px #E6E5E5;
+  /* padding: 4px; */
+  display: inline-block;
+  background-color: #fff;
+}
+
+button > div > label {
+  /* width: 48px; */
+  /* height: 48px; */
+  position: relative;
+  top: 21%;
+  /* padding-top: 8px; */
+  /* display: inline-block; */
+  color: #CCCBCC;
+}
+
+button:active {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  width: 64px;
+  right: 0;
+  height: 64px;
+  background-color: #fff;
+}
+
+button:active > div {
+  width: 48px;
+  height: 46px;
+  margin: 8px;
+  border-bottom: solid 2px #E6E5E5;
+  /* padding: 4px; */
+  display: inline-block;
+  background-color: #fff;
+}
+
+button:active > div > label {
+  /* width: 48px; */
+  /* height: 48px; */
+  position: relative;
+  top: 21%;
+  /* padding-top: 8px; */
+  /* display: inline-block; */
+  color: #CCCBCC;
+}
+
+button:hover {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  width: 64px;
+  right: 0;
+  height: 64px;
+  background-color: #E6E5E5;
+}
+
+button:hover > div {
+  width: 48px;
+  height: 45px;
+  margin: 8px;
+  border-bottom: solid 3px #E6E5E5;
+  /* padding: 4px; */
+  display: inline-block;
+  background-color: #fff;
+}
+
+button:hover > div > label {
+  /* width: 48px; */
+  /* height: 48px; */
+  position: relative;
+  top: 21%;
+  /* padding-top: 8px; */
+  /* display: inline-block; */
+  color: #CCCBCC;
+}
