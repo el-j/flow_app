@@ -8,6 +8,7 @@ import DemoFive from './DemoFive';
 import DemoSix from './DemoSix';
 import DemoSeven from './DemoSeven';
 import Flow from './Flow';
+import ProEnv from './ProEnv';
 import Menu from './Menu';
 import './App.css';
 
@@ -25,6 +26,7 @@ class App extends Component {
             <Route path="/demo6" component={DemoSix} />
             <Route path="/demo7" component={DemoSeven} />
             <Route path="/flow" component={Flow} />
+            <Route path="/proEnv" component={ProEnv} />
             <Route component={Menu} />
           </Switch>
         </div>
