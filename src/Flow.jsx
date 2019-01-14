@@ -1,5 +1,7 @@
 import React from 'react';
 import Lodash from 'lodash';
+import fetch from 'node-fetch';
+
 import {
 	DiagramWidget,
 	DiagramEngine,
@@ -18,34 +20,66 @@ import { DiamondNodeModel } from './components/Nodes/Diamond/DiamondNodeModel';
 import { DiamondPortModel } from './components/Nodes/Diamond/DiamondPortModel';
 import { DiamondWidgetFactory } from './components/Nodes/Diamond/DiamondWidgetFactory';
 
+
 import './srd.css';
 
+var http = require('http');
+
+// const sketchBundle = new SketchBundle()
+let url = 'http://127.0.0.1:3005/fzz'
+var toType = function(obj) {
+	return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
+}
 
 
 class Flow extends React.Component {
+	constructor(props) {
+    super(props);
+    this.state = {
+      data: {},
+    };
+  }
+
 	componentWillMount() {
-		//1) setup the diagram engine
+
+		this.getData(url)
 		this.engine = new DiagramEngine();
 		this.engine.registerNodeFactory(new DefaultNodeFactory());
 		this.engine.registerLinkFactory(new DefaultLinkFactory());
 		this.engine.registerNodeFactory(new DiamondWidgetFactory());
+
 	}
 
+	getData(url){
+	fetch(url).then(response =>
+		response.json()
+	).then(data => {
+		this.setState({data:JSON.parse(data)})}
+		)
+	}
+
+
 	handleClick(event){
+
+		this.getData(url)
 		event.preventDefault()
 		let test
-		console.log("clicked",event.target.tagName);
 		test = event.target.tagName
-		// test.split(-1)
-		// console.log(test);
 		if (test === "svg") {
 			console.log(test);
-			
 			test = "bla"
 			var nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
 			var node = null;
-			node = new DiamondNodeModel('Node ' + (nodesCount + 1), 'peru');
-			node.addPort(new DiamondPortModel(true, 'in-1', 'In'));
+			console.log(this.state.data);
+			node = new DiamondNodeModel('Node ' + (nodesCount + 1), 'rgb(255,0,255)',this.state.data);
+			for (var i = 0; i < this.state.data.length; i++) {
+				if (i % 2 === 0) {
+					node.addPort(new DiamondPortModel('in-'+i, 'In'));
+				}
+				else {
+					node.addPort(new DiamondPortModel('out-'+i, 'Out'));
+				}
+			}
 			var points = this.engine.getRelativeMousePoint(event);
 			node.x = points.x;
 			node.y = points.y;

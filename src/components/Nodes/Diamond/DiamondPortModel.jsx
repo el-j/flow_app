@@ -2,21 +2,31 @@ import { PortModel } from 'storm-react-diagrams';
 import Lodash from 'lodash';
 
 export class DiamondPortModel extends PortModel {
-	position: string | 'In' | 'Out' ;
+	label: string;
+	direction: string;
 
-	constructor(pos: string = 'In') {
-		super(pos);
-		this.position = pos;
+	constructor(name: string,direction: string = 'In',label: string = null,) {
+		super(name,direction);
+		console.log(direction, name);
+		this.direction = direction;
+		this.id = label || name ;
+		this.label = label || name ;
 	}
 
 	serialize() {
 		return Lodash.merge(super.serialize(), {
-			position: this.position
+			label: this.label,
+			id: this.id,
+			direction: this.direction
 		});
 	}
 
 	deSerialize(data: any) {
 		super.deSerialize(data);
-		this.position = data.position;
+		this.id = data.id,			
+
+		// this.in = data.in
+		this.label = data.label
+		this.direction = data.direction;
 	}
 }
