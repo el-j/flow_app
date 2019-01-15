@@ -1,6 +1,7 @@
 import React from 'react';
 import { DiamondNodeModel } from './DiamondNodeModel';
 import { PortWidget } from 'storm-react-diagrams';
+import IsEmpty from '../../../IsEmpty'
 
 export interface DiamonNodeWidgetProps {
 	node: DiamondNodeModel,
@@ -20,40 +21,75 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 
 	makeConnectors(){
 		let connectorSize = (this.props.size/ this.props.node.data.length)
-		return(
-		this.props.node.data.map((data,key) => {
-				if ( key % 2 === 0) {
-					// console.log(key, key % 2);
-					return(
-				<div
-						key = {key}
-						style={{
-						position: 'absolute',
-						height: connectorSize,
-						 zIndex: 10,
-						 left: -8,
-						 top: connectorSize + (key*connectorSize) - connectorSize}}
-						>
-					<PortWidget name={'in-'+ key } direction="In" node={this.props.node} />
-					</div>)
-				}
-				else {
-					return(
-						<div
-						key = {key}
+		console.log("makeConnectors",IsEmpty(this.props.node.data),this.props.node.data);
+		if (!IsEmpty(this.props.node.data)) {
+			return(
+			this.props.node.data.map((data,key) => {
+					if ( key % 2 === 0) {
+						// console.log(key, key % 2);
+						return(
+					<div
+							key = {key}
 							style={{
+							position: 'absolute',
+							height: connectorSize,
+							 zIndex: 10,
+							 left: -8,
+							 top: connectorSize + (key*connectorSize) - connectorSize}}
+							>
+						<PortWidget name={'in-'+ key } direction="In" node={this.props.node} />
+						</div>)
+					}
+					else {
+						return(
+							<div
+							key = {key}
+							style={{
+								height: connectorSize,
 								position: 'absolute',
 								zIndex: 10,
 								left: this.props.size - 8,
 								top:  (key*connectorSize) - connectorSize
 							}}
-						>
+							>
 							<PortWidget name={'out-'+ key } direction="Out" node={this.props.node} />
-						</div>
+							</div>
 						)
-				}
-			}))
+					}
+
+				}))
+		}
+		else {
+			console.log("we have else");
+			return(
+				<div>
+					<div
+						style={{
+							height: connectorSize,
+							position: 'absolute',
+							zIndex: 10,
+							left: this.props.size - 8,
+							top:  this.props.size/2
+						}}
+					>
+						<PortWidget name={'out-n' } direction="Out" node={this.props.node} />
+					</div>
+					<div
+						style={{
+						position: 'absolute',
+						height: connectorSize,
+						 zIndex: 10,
+						 left: -8,
+						 top: this.props.size/2
+					 }}
+						>
+						<PortWidget name={'in-n'  } direction="In" node={this.props.node} />
+					</div>
+			</div>
+			)
+		}
 	}
+
 	createMarkup() {
 		return {
 			__html:
