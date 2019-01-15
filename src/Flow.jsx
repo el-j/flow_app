@@ -22,6 +22,7 @@ import { DiamondPortModel } from './components/Nodes/Diamond/DiamondPortModel';
 import { DiamondWidgetFactory } from './components/Nodes/Diamond/DiamondWidgetFactory';
 
 import AddBar from './components/uiTools/AddBar'
+import SelectedBlock from './components/uiTools/SelectedBlock'
 
 import './srd.css';
 
@@ -42,10 +43,11 @@ class Flow extends React.Component {
 			addNew: false,
 			notSvg: false,
 			addBarInput: 'Add a Name now',
+			selected:false,
 			mouse: { x: 0, y: 0 },
 			err: {
 				show: false,
-				message: ''
+				message: {}
 			}
     };
   }
@@ -62,12 +64,18 @@ class Flow extends React.Component {
 		fetch(url).then(response =>
 			response.json()
 		).then(data => {
-				console.log(data);
-			this.setState({data:JSON.parse(data)})
+				console.log("in then fetch",data);
+				data.err ? (
+					console.log(data.err),
+					this.setState({err:{show:data.err.show, message:JSON.stringify(data.err.message)}})
+				) : (
+					this.setState({data:JSON.parse(data), err:{show:false, message:' '}})
+				)
 		}
 		).catch((err) => {
-			this.setState({data:{}})
-      this.setState({err: {show: true, message:'cannot get Data from server',err}})
+
+			console.log('the error',JSON.stringify(err), toType(err), new Error(err))
+      this.setState({err:{show:true,message:JSON.stringify(err)}})
     });
 	}
 	// the update value function for the addBar
@@ -76,12 +84,12 @@ class Flow extends React.Component {
 
 	}
 	addNewBlock(e){
-		this.getData(this.state.addBarInput || 'http://127.0.0.1:3005/fzz/Lauflicht_Projekt.fzz')
+		this.getData(this.state.addBarInput)
 		console.log(!IsEmpty(this.state.data),this.state.data);
 		if (!IsEmpty(this.state.data)) {
 			var nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
 			var node = null;
-			node = new DiamondNodeModel(this.state.addBarInput, 'rgb(255,0,255)',this.state.data);
+			node = new DiamondNodeModel(this.state.addBarInput, 'rgb(179,179,179)',this.state.data,this.state.selected,this.state.mouse);
 			for (var i = 0; i < this.state.data.length; i++) {
 				if (i % 2 === 0) {
 					node.addPort(new DiamondPortModel('in-'+i, 'In'));
@@ -100,7 +108,7 @@ class Flow extends React.Component {
 				this.setState({err: {show: true, message:'no data, please load file'}})
 				var nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
 				var node = null;
-				node = new DiamondNodeModel(this.state.addBarInput, 'rgb(255,0,255)',this.state.data);
+				node = new DiamondNodeModel(this.state.addBarInput, 'rgb(255,0,255)',this.state.data,this.state.selected,this.state.mouse);
 				var points = this.engine.getRelativeMousePoint(e);
 				node.addPort(new DiamondPortModel('in-n', 'In'));
 				node.addPort(new DiamondPortModel('out-n', 'Out'));
@@ -117,38 +125,50 @@ class Flow extends React.Component {
 		let test
 		test = e.target.tagName
 		let isClass = e.target.className
-		console.log(e);
+		let selected = this.engine.getDiagramModel().getSelectedItems()
+		if (!IsEmpty(selected)) {
+			// console.log(selected[0].x);
+			this.setState({mouse:{ x: selected[0].x, y: selected[0].y }});
+			selected = {}
+		}
 		switch (test) {
 			case "svg":
 				this.setState({mouse:{ x: e.pageX, y: e.pageY }});
-				this.setState({notSvg:false, addNew:true})
-				console.log("case svg:",  test, '    notSvg:', this.state.notSvg, '    addNew:', this.state.addNew);
+				this.setState({notSvg:false, addNew:true , selected:false})
+				console.log("case svg:",  test, '    notSvg:', this.state.notSvg, '    addNew:', this.state.addNew,' selected:', this.state.selected);
 				break;
 
 			case "INPUT":
-				this.setState({notSvg:false, addNew:true})
-				console.log("case INPUT:",  test, '    notSvg:', this.state.notSvg, '    addNew:', this.state.addNew);
+				this.setState({notSvg:false, addNew:true,  selected:false})
+				console.log("case INPUT:",  test, '    notSvg:', this.state.notSvg, '    addNew:', this.state.addNew,' selected:', this.state.selected);
 				break;
 
 			case "LABEL":
-				this.setState({notSvg:false, addNew:true})
-				console.log("case LABEL:",  test, '    notSvg:', this.state.notSvg, '    addNew:', this.state.addNew);
+				this.setState({notSvg:false, addNew:true,  selected:false})
+				console.log("case LABEL:",  test, '    notSvg:', this.state.notSvg, '    addNew:', this.state.addNew,' selected:', this.state.selected);
 				break;
 
 			default:
 				if (isClass === 'storm-diagrams-canvas') {
-					this.setState({notSvg:false, addNew:true})
+					this.setState({notSvg:false, addNew:true, selected:false})
 				}
 				else {
-				this.setState({notSvg:false, addNew:false})
+					// this.setState({mouse:{ x: selected[0].x, y: selected[0].y }});
+				this.setState({notSvg:false, addNew:false, selected:true})
+
 				}
-				console.log("case default:",  test, '    notSvg:', this.state.notSvg, '    addNew:', this.state.addNew);
+				console.log("case default:",  test, '    notSvg:', this.state.notSvg, '    addNew:', this.state.addNew,' selected:', this.state.selected);
 		}
 
 	}
+	// getSelectedItems(){
+	// 	let selected = this.engine.getDiagramModel().getSelectedItems()
+	// 	return {mouse: {x:selected[0].x,y:selected[0].y}}
+	// }
 	// console.log("we have aclick");
 	handleClick(e){
 		e.preventDefault()
+		// console.log(this.engine.getDiagramModel().getSelectedItems());
 		this.testSvg(e)
 	}
 	render() {
@@ -165,12 +185,14 @@ class Flow extends React.Component {
 				updateInputValue={e => this.updateInputValue(e)}
 				/>
 				: () => this.setState({addBarInput: ' '})}
+
+
 				<div
 					className="diagram-layer"
 					onDragOver={e => {
-						e.preDefault();
+						this.handleClick(e)
 					}}
-				>
+					>
 					<DiagramWidget diagramEngine={this.engine} />
 				</div>
 			</div>
