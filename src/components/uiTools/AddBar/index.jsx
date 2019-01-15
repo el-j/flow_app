@@ -8,7 +8,7 @@ import './addBar.css';
 // }
 
 
-const ProEnv = (props) => {
+const AddBar = (props) => {
 	// console.log(props);
 		return (
 			<div className="addBarFrame" style={{top: props.pos.y,left: props.pos.x}}>
@@ -25,4 +25,4 @@ const ProEnv = (props) => {
 		);
 }
 
-export default ProEnv;
+export default AddBar;
