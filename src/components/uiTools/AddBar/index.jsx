@@ -1,6 +1,6 @@
 import React from 'react';
-import Lodash from 'lodash';
-import fetch from 'node-fetch';
+// import Lodash from 'lodash';
+// import fetch from 'node-fetch';
 import './addBar.css';
 
 // const addNewBlock = ()  => {
@@ -8,11 +8,11 @@ import './addBar.css';
 // }
 
 
-const ProEnv = (props) => {
+const AddBar = (props) => {
 	// console.log(props);
 		return (
 			<div className="addBarFrame" style={{top: props.pos.y,left: props.pos.x}}>
-			  <input type="text" name="name" placeholder="Add new Block from fzz" value={props.inputValue} onChange={evt => props.updateInputValue(evt)}/>
+			  <input className="addBarInput" type="text" name="name" placeholder="Add new Block from fzz" value={props.inputValue} onChange={evt => props.updateInputValue(evt)}/>
 
 				<button onClick={event => props.addNewBlock(event)}>
 					<div>
@@ -25,4 +25,4 @@ const ProEnv = (props) => {
 		);
 }
 
-export default ProEnv;
+export default AddBar;

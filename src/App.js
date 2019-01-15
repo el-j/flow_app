@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
-import DemoOne from './DemoOne';
-import DemoTwo from './DemoTwo';
-import DemoThree from './DemoThree';
-import DemoFour from './DemoFour';
-import DemoFive from './DemoFive';
-import DemoSix from './DemoSix';
-import DemoSeven from './DemoSeven';
+import DemoOne from './demos/DemoOne';
+import DemoTwo from './demos/DemoTwo';
+import DemoThree from './demos/DemoThree';
+import DemoFour from './demos/DemoFour';
+import DemoFive from './demos/DemoFive';
+import DemoSix from './demos/DemoSix';
+import DemoSeven from './demos/DemoSeven';
 import Flow from './Flow';
-import ProEnv from './ProEnv';
 import Menu from './Menu';
 import './App.css';
 
@@ -26,7 +25,6 @@ class App extends Component {
             <Route path="/demo6" component={DemoSix} />
             <Route path="/demo7" component={DemoSeven} />
             <Route path="/flow" component={Flow} />
-            <Route path="/proEnv" component={ProEnv} />
             <Route component={Menu} />
           </Switch>
         </div>

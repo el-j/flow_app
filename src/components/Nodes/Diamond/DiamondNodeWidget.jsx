@@ -1,13 +1,17 @@
 import React from 'react';
 import { DiamondNodeModel } from './DiamondNodeModel';
 import { PortWidget } from 'storm-react-diagrams';
+import IsEmpty from '../../../IsEmpty'
+import SelectedBlock from '../../uiTools/SelectedBlock'
 
 export interface DiamonNodeWidgetProps {
 	node: DiamondNodeModel,
 	size?: number,
 	name: string,
 	color: string,
+	selected: boolean,
 	data: array,
+	mouse: object,
 }
 
 export interface DiamonNodeWidgetState {}
@@ -15,45 +19,81 @@ export interface DiamonNodeWidgetState {}
 export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, DiamonNodeWidgetState> {
 	constructor(props: DiamonNodeWidgetProps) {
 		super(props);
-		this.state = {};
+		this.state = {
+		};
 	}
 
 	makeConnectors(){
 		let connectorSize = (this.props.size/ this.props.node.data.length)
-		return(
-		this.props.node.data.map((data,key) => {
-				if ( key % 2 === 0) {
-					// console.log(key, key % 2);
-					return(
-				<div
-						key = {key}
-						style={{
-						position: 'absolute',
-						height: connectorSize,
-						 zIndex: 10,
-						 left: -8,
-						 top: connectorSize + (key*connectorSize) - connectorSize}}
-						>
-					<PortWidget name={'in-'+ key } direction="In" node={this.props.node} />
-					</div>)
-				}
-				else {
-					return(
-						<div
-						key = {key}
+		// console.log("makeConnectors",IsEmpty(this.props.node.data),this.props.node.data);
+		if (!IsEmpty(this.props.node.data)) {
+			return(
+			this.props.node.data.map((data,key) => {
+					if ( key % 2 === 0) {
+						// console.log(key, key % 2);
+						return(
+					<div
+							key = {key}
 							style={{
+							position: 'absolute',
+							height: connectorSize,
+							 zIndex: 10,
+							 left: -8,
+							 top: connectorSize + (key*connectorSize) - connectorSize}}
+							>
+						<PortWidget name={'in-'+ key } direction="In" node={this.props.node} />
+						</div>)
+					}
+					else {
+						return(
+							<div
+							key = {key}
+							style={{
+								height: connectorSize,
 								position: 'absolute',
 								zIndex: 10,
 								left: this.props.size - 8,
 								top:  (key*connectorSize) - connectorSize
 							}}
-						>
+							>
 							<PortWidget name={'out-'+ key } direction="Out" node={this.props.node} />
-						</div>
+							</div>
 						)
-				}
-			}))
+					}
+
+				}))
+		}
+		else {
+			// console.log("we have else");
+			return(
+				<div>
+					<div
+						style={{
+							height: connectorSize,
+							position: 'absolute',
+							zIndex: 10,
+							left: this.props.size - 8,
+							top:  this.props.size/2
+						}}
+					>
+						<PortWidget name={'out-n' } direction="Out" node={this.props.node} />
+					</div>
+					<div
+						style={{
+						position: 'absolute',
+						height: connectorSize,
+						 zIndex: 10,
+						 left: -8,
+						 top: this.props.size/2
+					 }}
+						>
+						<PortWidget name={'in-n'  } direction="In" node={this.props.node} />
+					</div>
+			</div>
+			)
+		}
 	}
+
 	createMarkup() {
 		return {
 			__html:
@@ -85,7 +125,14 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 				className="diamond-node"
 				style={{ position: 'relative', width: this.props.size, height: this.props.size }}
 			>
+			{console.log(this.props.node)}
 				<svg width="150" height="150" dangerouslySetInnerHTML={this.createMarkup()} />
+				{this.props.node.selected ? (console.log(this.state.data),<SelectedBlock
+					pos={this.props.node.mouse}
+					connectors={this.props.node.data}
+					/>)
+					: null}
+
 				{this.makeConnectors()}
 
 			</div>
@@ -96,10 +143,11 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 // {console.log(this.props.node.ports)}
 
 DiamonNodeWidget.defaultProps = {
-	size: 150,
-	// color: '#fff',
+	size: 128,
+	selected:false,
 	data: [],
 	node: null,
+	mouse: {}
 	// name: "a Name"
 };
 export var DiamonNodeWidgetFactory = React.createFactory(DiamonNodeWidget);
