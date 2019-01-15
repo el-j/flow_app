@@ -1,0 +1,156 @@
+.selectedFrame {
+  left: -4px;
+  top: -4px;
+  position: absolute;
+  z-index: -2;
+  width: 128px;
+  /* height: 100%;*/
+  border: solid 4px rgb(0,244,0);
+  background-color: rgb(67, 67, 67);
+}
+
+.connectors {
+  margin-top: 128px;
+  height: 100%;
+  width: 100%;
+  /* position: relative; */
+  border: none;
+  display: inline-block;
+  /* background-color: #f0f; */
+}
+
+.connector {
+  height: 16px;
+  width: 48px;
+  background-color: #666;
+  margin: 4px 4px 0;
+  border: solid 1px #fff;
+}
+
+.conIn {
+  float: left;
+}
+
+.conOut {
+  float: right;
+}
+
+.conIn > p {
+  text-align: left;
+  font-size: 10px;
+  font-style: italic;
+  padding: 0 8px;
+  margin: 2px;
+  color: #B3B3B3;
+
+}
+
+.conOut > p {
+  text-align: right;
+  font-size: 10px;
+  font-style: italic;
+  padding: 0 8px;
+  margin: 2px;
+  color: #B3B3B3;
+}
+
+.selectedbutton {
+  z-index: 5000;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  width: 64px;
+  left: calc(100% + 4px);
+  top: -68px;
+  height: 64px;
+  background-color: #CCCBCC;
+}
+
+.selectedbutton > div {
+  width: 48px;
+  height: 44px;
+  top: 0;
+  left: 0;
+  z-index: 5000;
+  position: absolute;
+  border-bottom: solid 4px #E6E5E5;
+  display: inline-block;
+  background-color: #fff;
+}
+
+.selectedbutton > div > .label {
+  top: 21%;
+  color: #CCCBCC;
+}
+
+.selectedbutton:active {
+  z-index: 5000;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  width: 64px;
+  left: calc(100% + 4px);
+  top: -68px;
+  height: 64px;
+  background-color: #fff;
+}
+
+.selectedbutton:active > div {
+  height: 46px;
+  border-bottom: solid 2px #E6E5E5;
+}
+
+.selectedbutton:active > div > .label {
+  top: 21%;
+  color: #CCCBCC;
+}
+
+.selectedbutton:hover {
+  z-index: 5000;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  width: 64px;
+  left: calc(100% + 4px);
+  top: -68px;
+  height: 64px;
+  background-color: #E6E5E5;
+}
+
+.selectedbutton:hover > div {
+  height: 45px;
+  border-bottom: solid 3px #E6E5E5;
+  background-color: #fff;
+}
+
+.selectedbutton:hover > div > .label {
+  top: 21%;
+  color: #CCCBCC;
+}
+
+.kindChooser > input {
+  margin-top: 4px;
+  margin-right: 2px;
+  background-color: #E6E5E5;
+  font-size: 10px;
+  width: 57px;
+  float: right;
+  border: none;
+  border-radius: 2px;
+  padding: 2px;
+}
+
+.typeChooser > input {
+  margin-top: 4px;
+  margin-left: 2px;
+  background-color: #E6E5E5;
+  font-size: 10px;
+  float: left;
+  width: 57px;
+  border: none;
+  border-radius: 2px;
+  padding: 2px;
+}
