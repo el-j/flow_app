@@ -13,7 +13,7 @@ import {
 	LinkInstanceFactory
 } from 'storm-react-diagrams';
 
-import './srd.css';
+import '../srd.css';
 
 class DemoSix extends React.Component {
 	componentWillMount() {

@@ -10,7 +10,7 @@ import {
 	LinkModel
 } from 'storm-react-diagrams';
 
-import './srd.css';
+import '../srd.css';
 
 class DemoTwo extends React.Component {
 	generateNodes(model: DiagramModel, offsetX: number, offsetY: number) {

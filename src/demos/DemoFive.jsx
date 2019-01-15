@@ -8,10 +8,10 @@ import {
 	DefaultNodeModel,
 	DefaultPortModel
 } from 'storm-react-diagrams';
-import TrayWidget from './components/TrayWidget';
-import TrayItemWidget from './components/TrayItemWidget';
+import TrayWidget from '../components/TrayWidget';
+import TrayItemWidget from '../components/TrayItemWidget';
 
-import './srd.css';
+import '../srd.css';
 
 class DemoFive extends React.Component {
 	componentWillMount() {
