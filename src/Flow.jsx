@@ -14,6 +14,8 @@ import {
 	LinkModel
 } from 'storm-react-diagrams';
 
+// import Snap from 'snapsvg-cjs';
+
 import TrayWidget from './components/TrayWidget';
 import TrayItemWidget from './components/TrayItemWidget';
 
@@ -87,6 +89,7 @@ class Flow extends React.Component {
 		this.getData(this.state.addBarInput)
 		console.log(!IsEmpty(this.state.data),this.state.data);
 		if (!IsEmpty(this.state.data)) {
+			console.log("THE DATA WE GOT",this.state.data);
 			var nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
 			var node = null;
 			node = new DiamondNodeModel(this.state.addBarInput, 'rgb(179,179,179)',this.state.data,this.state.selected,this.state.mouse);
