@@ -1,0 +1,45 @@
+.chooser-bg {
+  width: 100%;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  display: block;
+  background: rgba(0,0,0,0.9);
+  height: 100vh;
+  position: absolute;
+  z-index: 1000;
+}
+
+.chooser-frame {
+  width: 50%;
+  left: 25%;
+  display: block;
+  background: rgba(255,255,255,0.5);
+  height: 90vh;
+  position: absolute;
+  z-index: 100;
+}
+
+.PinChooser {
+  text-decoration: none;
+}
+
+.chooser {
+  float: left;
+  overflow: scroll;
+  max-height: 70vh;
+  overflow-x: hidden;
+}
+
+.chooser-svg {
+  margin: auto;
+}
+
+.chooser-list {
+  list-style-type: none;
+}
+
+.chooser-list > li {
+  padding: 5px;
+}
