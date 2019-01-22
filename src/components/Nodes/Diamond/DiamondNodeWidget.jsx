@@ -24,12 +24,13 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 	}
 
 	makeConnectors(){
-		let connectorSize = (this.props.size/ this.props.node.data.length)
-		// console.log("makeConnectors",IsEmpty(this.props.node.data),this.props.node.data);
-		if (!IsEmpty(this.props.node.data)) {
+		let connectorSize = (this.props.size/ this.props.node.data.connected.length)
+		// console.log("makeConnectors",IsEmpty(this.props.node.data.connected),this.props.node.data.connected);
+		if (!IsEmpty(this.props.node.data.connected)) {
+			console.log(this.props.node.data.connected);
 			return(
-			this.props.node.data.map((data,key) => {
-					if ( key % 2 === 0) {
+			this.props.node.data.connected.map((el,key) => {
+					if (el.type === 'in' ) {
 						// console.log(key, key % 2);
 						return(
 					<div
@@ -44,7 +45,7 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 						<PortWidget name={'in-'+ key } direction="In" node={this.props.node} />
 						</div>)
 					}
-					else {
+					if (el.type === 'out' ) {
 						return(
 							<div
 							key = {key}
@@ -125,11 +126,10 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 				className="diamond-node"
 				style={{ position: 'relative', width: this.props.size, height: this.props.size }}
 			>
-			{console.log(this.props.node)}
 				<svg width="150" height="150" dangerouslySetInnerHTML={this.createMarkup()} />
 				{this.props.node.selected ? (console.log(this.state.data),<SelectedBlock
 					pos={this.props.node.mouse}
-					connectors={this.props.node.data}
+					connectors={this.props.node.data.connected}
 					/>)
 					: null}
 
