@@ -12,26 +12,22 @@ const PinChooser = (props) => {
 
 				<div className='chooser-frame'>
 					<div className='chooser'>
-						<ul className='chooser-list'>
-							<div>Name	In 	Out 	Unknown</div>
-							<form >
+						<table className='chooser-list'>
+							<tr><th>Name</th>	<th>In</th> 	<th>Out</th> <th>	Unknown</th></tr>
 								{props.connectors.map((el,key)=> (
 									(el.type === 'in' || el.type === 'out' || el.type === 'unknown') ? (
-									<li key={key} className='chooser-listelement'>
-										<label className='chooser-label'>{el.name} </label>
-										<p>
-											<input className='chooser-radio' type='radio' name={el.connector} value="in" onChange={props.handleOptionChange} checked={el.type === "in"}/>
-											<input className='chooser-radio' type='radio' name={el.connector} value="out" onChange={props.handleOptionChange} checked={el.type === "out"}/>
-											<input className='chooser-radio' type='radio' name={el.connector} value="unknown" onChange={props.handleOptionChange} checked={el.type === "unknown"}/>
-										</p>
-									</li>
+									<tr key={key} className='chooser-listelement'>
+											<td className='chooser-label'>{el.name} </td>
+											<td><input className='chooser-radio' type='radio' name={el.connector} value="in" onChange={props.handleOptionChange} checked={el.type === "in"}/></td>
+											<td><input className='chooser-radio' type='radio' name={el.connector} value="out" onChange={props.handleOptionChange} checked={el.type === "out"}/></td>
+											<td><input className='chooser-radio' type='radio' name={el.connector} value="unknown" onChange={props.handleOptionChange} checked={el.type === "unknown"}/></td>
+									</tr>
 									):(null)
 								))}
-								<button className="submitChangesButton" type="submit" onClick={props.handleFormSubmit}>
-						      Save
-						    </button>
-							</form>
-						</ul>
+						</table>
+						<button className="submitChangesButton" type="submit" onClick={props.handleFormSubmit}>
+						Save
+						</button>
 					</div>
 					<div>
 					<div className="chooser-svg"  dangerouslySetInnerHTML={{__html: props.svg}} />
