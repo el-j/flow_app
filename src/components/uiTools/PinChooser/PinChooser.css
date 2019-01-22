@@ -19,6 +19,7 @@
   height: 90vh;
   position: absolute;
   z-index: 100;
+  padding: 10px;
 }
 
 .PinChooser {
@@ -28,18 +29,38 @@
 .chooser {
   float: left;
   overflow: scroll;
-  max-height: 70vh;
+  min-height: 90vh;
   overflow-x: hidden;
+  height: 90vh;
+}
+
+.chooser-svgContainer {
+  top: 10%;
+  display: inline-block;
 }
 
 .chooser-svg {
+  /* margin: auto; */
+  display: inline-block;
+  text-align: center;
+  left: 50%;
+  position: absolute;
+  transform: rotate(90deg);
+  /* left: 0; */
+  /* right: 0; */
+  top: 25%;
+  /* bottom: 0; */
   margin: auto;
 }
 
 .chooser-list {
   list-style-type: none;
+  border: none;
+  border-spacing: 0;
 }
 
-.chooser-list > li {
-  padding: 5px;
+.submitChangesButton {
+  position: relative;
+  top: 50%;
+  bottom: 0;
 }
