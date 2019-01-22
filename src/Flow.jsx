@@ -28,7 +28,7 @@ import SelectedBlock from './components/uiTools/SelectedBlock'
 
 import './srd.css';
 
-const fzzServerAddress = 'http://127.0.0.1:3005/fzz/'
+const fzzServerAddress = 'http://127.0.0.1:3005/'
 
 var http = require('http');
 
@@ -37,6 +37,8 @@ var http = require('http');
 var toType = function(obj) {
 	return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
 }
+
+
 
 
 class Flow extends React.Component {
@@ -53,14 +55,36 @@ class Flow extends React.Component {
 				show: false,
 				message: {}
 			}
+			, dataBase: {}
     };
   }
 
 	componentWillMount() {
+		this.loadDataBase = this.loadDataBase(fzzServerAddress + 'database')
 		this.engine = new DiagramEngine();
 		this.engine.registerNodeFactory(new DefaultNodeFactory());
 		this.engine.registerLinkFactory(new DefaultLinkFactory());
 		this.engine.registerNodeFactory(new DiamondWidgetFactory());
+	}
+
+	loadDataBase(url){
+		fetch(url).then(response =>
+			response.json()
+		).then(data => {
+				console.log("in then fetch of load DataBase",data);
+				data.err ? (
+					console.log(data.err),
+					this.setState({err:{show:data.err.show, message:data.err.message}})
+				) : ( (this.state.dataBase === data) ?
+					this.setState({dataBase:data, err:{show:false, message:' '}}) :
+					console.log("allready have this data",data)
+				)
+		}
+		).catch((err) => {
+
+			console.log('the error',err, toType(err), new Error(err))
+			this.setState({err:{show:true,message:err}})
+		});
 	}
 
 	getData(url){
@@ -71,14 +95,14 @@ class Flow extends React.Component {
 				console.log("in then fetch",data);
 				data.err ? (
 					console.log(data.err),
-					this.setState({err:{show:data.err.show, message:JSON.stringify(data.err.message)}})
+					this.setState({err:{show:data.err.show, message:data.err.message}})
 				) : (
-					this.setState({data:JSON.parse(data), err:{show:false, message:' '}})
+					this.setState({data:data, err:{show:false, message:' '}})
 				)
 		}
 		).catch((err) => {
 
-			console.log('the error',JSON.stringify(err), toType(err), new Error(err))
+			console.log('the error',err, toType(err), new Error(err))
       this.setState({err:{show:true,message:JSON.stringify(err)}})
     });
 	}
@@ -88,9 +112,9 @@ class Flow extends React.Component {
 
 	}
 	addNewBlock(e){
-		let getFile = fzzServerAddress + this.state.addBarInput + '.fzz'
-		console.log(getFile);
-		this.getData(getFile)
+		let serverFileAddress = fzzServerAddress + 'fzz/' + this.state.addBarInput + '.fzz'
+		console.log(serverFileAddress);
+		this.getData(serverFileAddress)
 		console.log(!IsEmpty(this.state.data),this.state.data);
 		if (!IsEmpty(this.state.data)) {
 			console.log("THE DATA WE GOT",this.state.data);
