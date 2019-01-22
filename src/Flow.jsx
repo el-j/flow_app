@@ -1,7 +1,7 @@
 import React from 'react';
-import Lodash from 'lodash';
+import _ from 'lodash';
 import fetch from 'node-fetch';
-
+import update from 'react-addons-update';
 import IsEmpty from './IsEmpty'
 import {
 	DiagramWidget,
@@ -25,6 +25,8 @@ import { DiamondWidgetFactory } from './components/Nodes/Diamond/DiamondWidgetFa
 
 import AddBar from './components/uiTools/AddBar'
 import SelectedBlock from './components/uiTools/SelectedBlock'
+import PinChooser from './components/uiTools/PinChooser'
+
 
 import './srd.css';
 
@@ -46,6 +48,7 @@ class Flow extends React.Component {
     super(props);
     this.state = {
       data: {},
+			showConnectorChooser: false,
 			addNew: false,
 			notSvg: false,
 			addBarInput: 'Add a Name now',
@@ -57,6 +60,7 @@ class Flow extends React.Component {
 			}
 			, dataBase: {}
     };
+
   }
 
 	componentWillMount() {
@@ -92,7 +96,7 @@ class Flow extends React.Component {
 		fetch(url).then(response =>
 			response.json()
 		).then(data => {
-				console.log("in then fetch",data);
+				// console.log("in then fetch",data);
 				data.err ? (
 					console.log(data.err),
 					this.setState({err:{show:data.err.show, message:data.err.message}})
@@ -102,66 +106,104 @@ class Flow extends React.Component {
 		}
 		).catch((err) => {
 
-			console.log('the error',err, toType(err), new Error(err))
+			console.log('the error',JSON.stringify(err), toType(err), new Error(JSON.stringify(err)))
       this.setState({err:{show:true,message:JSON.stringify(err)}})
     });
 	}
 	// the update value function for the addBar
 	updateInputValue(e){
-		this.setState({addBarInput: e.target.value},() => this.getData(this.state.addBarInput))
-
+		this.setState({addBarInput: e.target.value},() => {
+			let serverFileAddress = fzzServerAddress + 'fzz/' + this.state.addBarInput + '.fzz'
+			this.state.addBarInput === _.find(this.state.dataBase, (el) => {return e.target.value === el}) ?
+			(console.log('we allready have this in database'))
+			: (
+				console.log("test", this.state.addBarInput),
+				this.getData(serverFileAddress),
+				console.log(serverFileAddress)
+				)
+    });
 	}
+
 	addNewBlock(e){
-		let serverFileAddress = fzzServerAddress + 'fzz/' + this.state.addBarInput + '.fzz'
-		console.log(serverFileAddress);
-		this.getData(serverFileAddress)
-		console.log(!IsEmpty(this.state.data),this.state.data);
+
+		var points = this.engine.getRelativeMousePoint(e);
+		// var nodesCount = _.keys(this.engine.getDiagramModel().getNodes()).length;
+		var allNodes = this.engine.getDiagramModel().getNodes()
 		if (!IsEmpty(this.state.data)) {
-			console.log("THE DATA WE GOT",this.state.data);
-			var nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
-			var node = null;
-			node = new DiamondNodeModel(this.state.addBarInput, 'rgb(179,179,179)',this.state.data,this.state.selected,this.state.mouse);
-			for (var i = 0; i < this.state.data.length; i++) {
-				if (i % 2 === 0) {
-					node.addPort(new DiamondPortModel('in-'+i, 'In'));
+			// console.log("THE DATA WE GOT",this.state.data);
+			let addNode
+			!IsEmpty(allNodes) ? (
+				addNode = _.filter(allNodes, (el)=>{return el})
+			) : null
+			let undefinedConnectors = _.filter(this.state.data.connected, (el) => el.type === 'unknown')
+			console.log(undefinedConnectors)
+				if (undefinedConnectors.length > 0) {
+						this.setState({addNew: false, showConnectorChooser:true})
+						// console.log("we have undefined connectors, need to setup connector chooser", this.state.addNew);
 				}
 				else {
-					node.addPort(new DiamondPortModel('out-'+i, 'Out'));
-				}
-			}
-			var points = this.engine.getRelativeMousePoint(e);
-			node.x = points.x;
-			node.y = points.y;
-			this.engine.getDiagramModel().addNode(node);
-			this.forceUpdate();
-		}
-		else {
-				this.setState({err: {show: true, message:'no data, please load file'}})
-				var nodesCount = Lodash.keys(this.engine.getDiagramModel().getNodes()).length;
+
+				// console.log(this.state.data.connected);
 				var node = null;
-				node = new DiamondNodeModel(this.state.addBarInput, 'rgb(255,0,255)',this.state.data,this.state.selected,this.state.mouse);
-				var points = this.engine.getRelativeMousePoint(e);
-				node.addPort(new DiamondPortModel('in-n', 'In'));
-				node.addPort(new DiamondPortModel('out-n', 'Out'));
+				node = new DiamondNodeModel(this.state.addBarInput, 'rgb(179,179,179)',this.state.data,this.state.selected,this.state.mouse);
+				this.state.data.connected.map((el,key) => {
+					if (el.type === 'in' ) {
+						node.addPort(new DiamondPortModel('in-'+key, 'In'));
+					}
+					else if (el.type === 'out' ) {
+						node.addPort(new DiamondPortModel('out-'+key, 'Out'));
+					}
+					// else {
+					// 	node.addPort(new DiamondPortModel('out-'+i, 'Out'));
+					// }
+				})
 
 				node.x = points.x;
 				node.y = points.y;
 				this.engine.getDiagramModel().addNode(node);
 				this.forceUpdate();
+			}
 		}
-
-	}
+		else {
+				this.setState({err: {show: true, message:'no data, please load file'}})
+				// var nodesCount = _.keys(this.engine.getDiagramModel().getNodes()).length;
+				// var node = null;
+				// node = new DiamondNodeModel(this.state.addBarInput, 'rgb(255,0,255)',this.state.data,this.state.selected,this.state.mouse);
+				// var points = this.engine.getRelativeMousePoint(e);
+				// node.addPort(new DiamondPortModel('in-n', 'In'));
+				// node.addPort(new DiamondPortModel('out-n', 'Out'));
+				//
+				// node.x = points.x;
+				// node.y = points.y;
+				// this.engine.getDiagramModel().addNode(node);
+				// this.forceUpdate();
+			}
+		}
 
 	testSvg(e){
 		let test
 		test = e.target.tagName
 		let isClass = e.target.className
+		let classType = toType(isClass)
 		let selected = this.engine.getDiagramModel().getSelectedItems()
 		if (!IsEmpty(selected)) {
-			// console.log(selected[0].x);
+
 			this.setState({mouse:{ x: selected[0].x, y: selected[0].y }});
 			selected = {}
 		}
+		console.log("targetName - switch case",test, 'classname', isClass, toType(isClass));
+		if (classType === 'string') {
+
+			if (isClass.includes('submitChangesButton')) {
+				console.log('handleFormSubmit now');
+				this.handleFormSubmit(e)
+			}
+			if (isClass.includes('chooser')) {
+				this.setState({notSvg:false, addNew:false, selected:false})
+			}
+		}
+		else {
+
 		switch (test) {
 			case "svg":
 				this.setState({mouse:{ x: e.pageX, y: e.pageY }});
@@ -186,17 +228,61 @@ class Flow extends React.Component {
 				else {
 					// this.setState({mouse:{ x: selected[0].x, y: selected[0].y }});
 				this.setState({notSvg:false, addNew:false, selected:true})
+			}
 
-				}
+		}
 				console.log("case default:",  test, '    notSvg:', this.state.notSvg, '    addNew:', this.state.addNew,' selected:', this.state.selected);
 		}
-
 	}
-	// getSelectedItems(){
-	// 	let selected = this.engine.getDiagramModel().getSelectedItems()
-	// 	return {mouse: {x:selected[0].x,y:selected[0].y}}
-	// }
-	// console.log("we have aclick");
+
+	handleFormSubmit = (e) => {
+		e.preventDefault();
+		console.log(e);
+		this.setState({showConnectorChooser: false})
+
+		this.addNewBlock(e)
+	}
+
+	handleOptionChange = (e) => {
+		console.log(e.target.name);
+		console.log('before',this.state.data);
+		for (var i = 0; i < this.state.data.connected.length; i++) {
+			let that = this.state.data.connected[i]
+			if	(that.connector === e.target.name){
+			// this.state.data.connected[i]
+			// this.setState({data: update(this.state.data.connected, {[i]:{type:{$set: e.target.value}}})})
+			console.log(that);
+			that.type = e.target.value
+			console.log(that);
+
+			this.setState({data: {...that, ...this.state.data}})
+			// this.setState({data: {connected: [i].type: e.target.value})
+				// this.setState({mouse:{ x: selected[0].x, y: selected[0].y }});
+			}
+		}
+		let currentKey
+		// let temp = _.find(this.state.data.connected, (el,key) =>{
+		// 	if (el.connector === e.target.name){
+		// 		el.type = e.target.value
+		// 		console.log(key,el)
+		// 		currentKey = key
+		// 		// this.setState({data: update(this.state.data.connected, {[key]:{type:{$set: e.target.value}}})})
+		// 		return el
+		//
+		// 	}
+		// })
+		// console.log(currentKey, temp);
+
+		// this.setState({data: {
+		// 	...temp, ...this.state.data
+		// }})
+
+
+		// this.setState((state,temp) => {
+		// 	return { data: {connected[currentKey]: temp}, ...this.state.data}
+		// })
+	};
+
 	handleClick(e){
 		e.preventDefault()
 		// console.log(this.engine.getDiagramModel().getSelectedItems());
@@ -217,6 +303,7 @@ class Flow extends React.Component {
 				/>
 				: () => this.setState({addBarInput: ' '})}
 
+				{this.state.showConnectorChooser ? <PinChooser className='PinChooser' handleOptionChange={e => this.handleOptionChange(e)} svg={this.state.data.breadSvg} connectors={this.state.data.connected}/>: null}
 
 				<div
 					className="diagram-layer"
