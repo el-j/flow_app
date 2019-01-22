@@ -28,6 +28,8 @@ import SelectedBlock from './components/uiTools/SelectedBlock'
 
 import './srd.css';
 
+const fzzServerAddress = 'http://127.0.0.1:3005/fzz/'
+
 var http = require('http');
 
 // const sketchBundle = new SketchBundle()
@@ -86,7 +88,9 @@ class Flow extends React.Component {
 
 	}
 	addNewBlock(e){
-		this.getData(this.state.addBarInput)
+		let getFile = fzzServerAddress + this.state.addBarInput + '.fzz'
+		console.log(getFile);
+		this.getData(getFile)
 		console.log(!IsEmpty(this.state.data),this.state.data);
 		if (!IsEmpty(this.state.data)) {
 			console.log("THE DATA WE GOT",this.state.data);
