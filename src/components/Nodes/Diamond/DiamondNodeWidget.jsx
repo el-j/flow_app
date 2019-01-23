@@ -1,6 +1,6 @@
 import React from 'react';
 import { DiamondNodeModel } from './DiamondNodeModel';
-import { PortWidget } from 'storm-react-diagrams';
+import { DiamondPortWidget } from './DiamondPortWidget';
 import IsEmpty from '../../../IsEmpty'
 import SelectedBlock from '../../uiTools/SelectedBlock'
 
@@ -49,7 +49,7 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 						let oldCounter = counterIn
 						counterIn = counterIn - 1
 						// console.log('the incounter is',oldCounter);
-						// console.log(this.props.node);
+						console.log(this.props.node.ports['in-'+ oldCounter].connected,el,key,counterIn);
 						return(
 					<div className='port'
 							key = {key}
@@ -60,7 +60,7 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 							 left: 0,
 							 top: (counterIn*inputConnectorSize)}}
 							>
-						<PortWidget in='true' name={'in-'+ oldCounter } direction="In" node={this.props.node} connected={this.props.connected}/>
+						<DiamondPortWidget in='true' name={'in-'+ oldCounter } direction="In" node={this.props.node} connected={this.props.node.ports['in-'+ oldCounter].connected}/>
 						</div>)
 					}
 					if (el.type === 'out' ) {
@@ -80,11 +80,10 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 								top:  (counterOut*outputConnectorSize)
 							}}
 							>
-							<PortWidget in='false' name={'out-'+ oldCounter } direction="Out" node={this.props.node} connected={this.props.connected}/>
+							<DiamondPortWidget in='false' name={'out-'+ oldCounter } direction="Out" node={this.props.node} connected={this.props.node.ports['out-'+ oldCounter].connected}/>
 							</div>
 						)
 					}
-
 				}))
 		}
 		else {
@@ -100,7 +99,7 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 							top:  this.props.size/2
 						}}
 					>
-						<PortWidget name={'out-n' } direction="Out" node={this.props.node} connected={this.props.connected} />
+						<DiamondPortWidget name={'out-n' } direction="Out" node={this.props.node} connected={false} />
 					</div>
 					<div
 						style={{
@@ -111,50 +110,33 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 						 top: this.props.size/2
 					 }}
 						>
-						<PortWidget name={'in-n'  } direction="In" node={this.props.node} connected={this.props.connected}/>
+						<DiamondPortWidget name={'in-n'  } direction="In" node={this.props.node} connected={this.props.connected}/>
 					</div>
 			</div>
 			)
 		}
 	}
 
-	createMarkup() {
-		return {
-			__html:
-				'<g id="Layer_1"></g><g id="Layer_2"><polygon points="0,' +
-				0 +
-				' ' +
-				0 +
-				','+
-				this.props.size +
-				' ' +
-				this.props.size +
-				',' +
-				this.props.size +
-				' ' +
-				this.props.size +
-				',' +
-				0 +
-				'" fill="'+this.props.node.color +'" stroke="none" stroke-width="3" stroke-miterlimit="10"/>' +
-				'<text x=' +
-				(this.props.size / 2 - 33) +
-				' y=' +
-				(this.props.size / 2 + 5) +
-				'>'+this.props.node.name +'</text></g>'
-		};
-	}
+
 	render() {
 		return (
 			<div
 				className="diamond-node"
 				style={{ position: 'relative', width: this.props.size, height: this.props.size }}
 			>
-				<svg width="150" height="150" dangerouslySetInnerHTML={this.createMarkup()} />
+
+					<div className="flowBlock" style={{
+						background:this.props.node.color,
+						// borderTop:`solid 2px ${this.props.node.color}`
+					}}>
+						<p>{this.props.node.name}</p>
+						</div>
 				{this.props.node.selected ? (
 					//console.log(this.state.data),
 					<SelectedBlock
 					pos={this.props.node.mouse}
-					connectors={this.props.node.data.connected}
+					connected = {this.props.node.ports}
+					node={this.props.node}
 					/>)
 					: null}
 
@@ -165,6 +147,7 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 	}
 }
 
+// <svg width="150" height="150" dangerouslySetInnerHTML={this.createMarkup()} />
 // {console.log(this.props.node.ports)}
 
 DiamonNodeWidget.defaultProps = {
