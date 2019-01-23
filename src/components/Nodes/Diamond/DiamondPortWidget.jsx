@@ -27,7 +27,7 @@ export class DiamondPortWidget extends React.Component<PortProps, PortState> {
 	}
 
 	render() {
-		console.log("from protwidget",this.state,this.props.direction)
+		// console.log("from protwidget",this.state,this.props.direction)
 		return (
 			<div
 				onMouseEnter={() =>{

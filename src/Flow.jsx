@@ -51,6 +51,7 @@ class Flow extends React.Component {
 			showConnectorChooser: false,
 			addNew: false,
 			notSvg: false,
+			loadDataBase: false,
 			addBarInput: 'Add a Name now',
 			selected:false,
 			mouse: { x: 0, y: 0 },
@@ -73,6 +74,7 @@ class Flow extends React.Component {
 	}
 
 	loadDataBase(url){
+		this.setState({loadDataBase:true})
 		fetch(url).then(response =>
 			response.json()
 		).then(data => {
@@ -82,7 +84,8 @@ class Flow extends React.Component {
 					this.setState({err:{show:data.err.show, message:data.err.message}})
 				) : ( (this.state.dataBase === data) ?
 				(
-					console.log("allready have this data")
+					console.log("allready have this data"),
+					this.setState({loadDataBase:false})
 				):(
 					this.setState({dataBase:data, err:{show:false, message:' '}})
 			 )
@@ -124,7 +127,7 @@ class Flow extends React.Component {
 					}
 					else{
 					if (this.state.addBarInput === getElement.name){
-						// console.log('we allready have this in database')
+						console.log('we allready have this in database')
 						this.setState({data: getElement.data})
 					}
 
@@ -231,7 +234,7 @@ class Flow extends React.Component {
 			}
 		}
 
-		getSelected =() =>{
+		getSelected = () =>{
 
 			let selected = this.engine.getDiagramModel().getSelectedItems()
 			let connected =this.engine.getDiagramModel().getLinks()
@@ -282,17 +285,17 @@ class Flow extends React.Component {
 			case "svg":
 				this.setState({mouse:{ x: e.pageX, y: e.pageY }});
 				this.setState({notSvg:false, addNew:true , selected:false})
-				// console.log("case svg:",  test, '    notSvg:', this.state.notSvg, '    addNew:', this.state.addNew,' selected:', this.state.selected);
+				console.log("case svg:",  test, '    notSvg:', this.state.notSvg, '    addNew:', this.state.addNew,' selected:', this.state.selected);
 				break;
 
 			case "INPUT":
 				this.setState({notSvg:false, addNew:true,  selected:false})
-				// console.log("case INPUT:",  test, '    notSvg:', this.state.notSvg, '    addNew:', this.state.addNew,' selected:', this.state.selected);
+				console.log("case INPUT:",  test, '    notSvg:', this.state.notSvg, '    addNew:', this.state.addNew,' selected:', this.state.selected);
 				break;
 
 			case "LABEL":
 				this.setState({notSvg:false, addNew:true,  selected:false})
-				// console.log("case LABEL:",  test, '    notSvg:', this.state.notSvg, '    addNew:', this.state.addNew,' selected:', this.state.selected);
+				console.log("case LABEL:",  test, '    notSvg:', this.state.notSvg, '    addNew:', this.state.addNew,' selected:', this.state.selected);
 				break;
 
 			default:
@@ -305,7 +308,7 @@ class Flow extends React.Component {
 			}
 
 		}
-				// console.log("case default:",  test, '    notSvg:', this.state.notSvg, '    addNew:', this.state.addNew,' selected:', this.state.selected);
+				console.log("case default:",  test, '    notSvg:', this.state.notSvg, '    addNew:', this.state.addNew,' selected:', this.state.selected);
 		}
 	}
 
@@ -348,6 +351,8 @@ class Flow extends React.Component {
 	}
 	render() {
 		return (
+			<div>
+			{this.state.loadDataBase ? (
 			<div className="content" onClick={e => this.handleClick(e)}>
 			{this.state.err.show ?
 			<div onClick={()=>{this.setState({err:{show:false,message:''}})}}>
@@ -373,6 +378,9 @@ class Flow extends React.Component {
 					<DiagramWidget diagramEngine={this.engine} />
 				</div>
 			</div>
+		) : (<div>we load the database from backend... please wait</div>)
+		}
+	</div>
 		);
 	}
 }
