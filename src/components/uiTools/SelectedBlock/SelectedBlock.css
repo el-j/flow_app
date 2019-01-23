@@ -4,6 +4,7 @@
   position: absolute;
   z-index: -2;
   width: 128px;
+  cursor: auto;
   /* height: 100%;*/
   border: solid 4px rgb(0,244,0);
   background-color: rgb(67, 67, 67);
@@ -17,6 +18,10 @@
   border: none;
   display: inline-block;
   /* background-color: #f0f; */
+}
+
+.connector.connected {
+  background: rgba(133, 148, 37, 1);
 }
 
 .connector {

@@ -1,0 +1,66 @@
+.chooser-bg {
+  width: 100%;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  display: block;
+  background: rgba(0,0,0,0.9);
+  height: 100vh;
+  position: absolute;
+  z-index: 1000;
+}
+
+.chooser-frame {
+  width: 50%;
+  left: 25%;
+  display: block;
+  background: rgba(255,255,255,0.5);
+  height: 90vh;
+  position: absolute;
+  z-index: 100;
+  padding: 10px;
+}
+
+.PinChooser {
+  text-decoration: none;
+}
+
+.chooser {
+  float: left;
+  overflow: scroll;
+  min-height: 90vh;
+  overflow-x: hidden;
+  height: 90vh;
+}
+
+.chooser-svgContainer {
+  top: 10%;
+  display: inline-block;
+}
+
+.chooser-svg {
+  /* margin: auto; */
+  display: inline-block;
+  text-align: center;
+  left: 50%;
+  position: absolute;
+  transform: rotate(90deg);
+  /* left: 0; */
+  /* right: 0; */
+  top: 25%;
+  /* bottom: 0; */
+  margin: auto;
+}
+
+.chooser-list {
+  list-style-type: none;
+  border: none;
+  border-spacing: 0;
+}
+
+.submitChangesButton {
+  position: relative;
+  top: 50%;
+  bottom: 0;
+}
