@@ -1,30 +1,30 @@
 import React from 'react';
 import _ from 'lodash';
 import fetch from 'node-fetch';
-import update from 'react-addons-update';
+// import update from 'react-addons-update';
 import IsEmpty from './IsEmpty'
 import {
 	DiagramWidget,
 	DiagramEngine,
 	DefaultNodeFactory,
 	DefaultLinkFactory,
-	DiagramModel,
-	DefaultNodeModel,
-	DefaultPortModel,
-	LinkModel
+	// DiagramModel,
+	// DefaultNodeModel,
+	// DefaultPortModel,
+	// LinkModel
 } from 'storm-react-diagrams';
 
 // import Snap from 'snapsvg-cjs';
 
-import TrayWidget from './components/TrayWidget';
-import TrayItemWidget from './components/TrayItemWidget';
+// import TrayWidget from './components/TrayWidget';
+// import TrayItemWidget from './components/TrayItemWidget';
 
 import { DiamondNodeModel } from './components/Nodes/Diamond/DiamondNodeModel';
 import { DiamondPortModel } from './components/Nodes/Diamond/DiamondPortModel';
 import { DiamondWidgetFactory } from './components/Nodes/Diamond/DiamondWidgetFactory';
 
 import AddBar from './components/uiTools/AddBar'
-import SelectedBlock from './components/uiTools/SelectedBlock'
+// import SelectedBlock from './components/uiTools/SelectedBlock'
 import PinChooser from './components/uiTools/PinChooser'
 
 
@@ -150,7 +150,7 @@ class Flow extends React.Component {
 		var allNodes = this.engine.getDiagramModel().getNodes()
 		if (!IsEmpty(this.state.data)) {
 			// console.log("THE DATA WE GOT",this.state.data);
-			let addNode
+			let addNode = ''
 			!IsEmpty(allNodes) ? (
 				addNode = _.filter(allNodes, (el)=>{return el})
 			) : null
