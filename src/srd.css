@@ -231,4 +231,5 @@ body {
 	vertical-align: middle;
 	line-height: normal;
 	word-break: break-all;
+	max-width: 64px;
 }
