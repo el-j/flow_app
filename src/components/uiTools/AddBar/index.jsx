@@ -12,9 +12,11 @@ const AddBar = (props) => {
 	// console.log(props);
 		return (
 			<div className="addBarFrame" style={{top: props.pos.y,left: props.pos.x}}>
-			  <input className="addBarInput" type="text" name="name" placeholder="Add new Block from fzz" value={props.inputValue} onChange={evt => props.updateInputValue(evt)}/>
-
-				<button onClick={event => props.addNewBlock(event)}>
+			  <input className="addBarInput" list='database_list' type="text" name='addBarInput' placeholder="Add new Block from fzz" value={props.inputValue} onChange={evt => props.updateInputValue(evt)}/>
+				<datalist id='database_list'>
+				{props.dataBase.map(el => <option value={el.name} /> )}
+				</datalist>
+									<button onClick={event => props.addNewBlock(event)}>
 					<div>
 						<label>
 						Add NEW

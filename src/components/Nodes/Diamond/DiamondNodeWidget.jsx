@@ -10,8 +10,10 @@ export interface DiamonNodeWidgetProps {
 	name: string,
 	color: string,
 	selected: boolean,
+	connected: boolean,
 	data: array,
 	mouse: object,
+	type: string
 }
 
 export interface DiamonNodeWidgetState {}
@@ -27,37 +29,58 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 		let connectorSize = (this.props.size/ this.props.node.data.connected.length)
 		// console.log("makeConnectors",IsEmpty(this.props.node.data.connected),this.props.node.data.connected);
 		if (!IsEmpty(this.props.node.data.connected)) {
-			console.log(this.props.node.data.connected);
+			// console.log(this.props.node.data.connected);
+
+			let totalInputCount = this.props.node.data.connected.filter((obj) => {
+ 			return obj.type === 'in';
+			}).length
+			let inputConnectorSize = (this.props.size/ totalInputCount)
+
+			let totalOutputCount = this.props.node.data.connected.filter((obj) => {
+ 			return obj.type === 'out';
+			}).length
+			let counterIn= totalInputCount
+			let counterOut = totalOutputCount
+
+			let outputConnectorSize = (this.props.size/ totalOutputCount)
 			return(
 			this.props.node.data.connected.map((el,key) => {
 					if (el.type === 'in' ) {
-						// console.log(key, key % 2);
+						let oldCounter = counterIn
+						counterIn = counterIn - 1
+						// console.log('the incounter is',oldCounter);
+						// console.log(this.props.node);
 						return(
-					<div
+					<div className='port'
 							key = {key}
 							style={{
 							position: 'absolute',
-							height: connectorSize,
+							height: inputConnectorSize,
 							 zIndex: 10,
-							 left: -8,
-							 top: connectorSize + (key*connectorSize) - connectorSize}}
+							 left: 0,
+							 top: (counterIn*inputConnectorSize)}}
 							>
-						<PortWidget name={'in-'+ key } direction="In" node={this.props.node} />
+						<PortWidget in='true' name={'in-'+ oldCounter } direction="In" node={this.props.node} connected={this.props.connected}/>
 						</div>)
 					}
 					if (el.type === 'out' ) {
+						// console.log(this.props.node);
+
+						let oldCounter = counterOut
+						counterOut = counterOut-1
 						return(
 							<div
+							className='port'
 							key = {key}
 							style={{
-								height: connectorSize,
+								height: outputConnectorSize,
 								position: 'absolute',
 								zIndex: 10,
-								left: this.props.size - 8,
-								top:  (key*connectorSize) - connectorSize
+								left: this.props.size-32,
+								top:  (counterOut*outputConnectorSize)
 							}}
 							>
-							<PortWidget name={'out-'+ key } direction="Out" node={this.props.node} />
+							<PortWidget in='false' name={'out-'+ oldCounter } direction="Out" node={this.props.node} connected={this.props.connected}/>
 							</div>
 						)
 					}
@@ -65,10 +88,10 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 				}))
 		}
 		else {
-			// console.log("we have else");
 			return(
 				<div>
 					<div
+					className='port'
 						style={{
 							height: connectorSize,
 							position: 'absolute',
@@ -77,7 +100,7 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 							top:  this.props.size/2
 						}}
 					>
-						<PortWidget name={'out-n' } direction="Out" node={this.props.node} />
+						<PortWidget name={'out-n' } direction="Out" node={this.props.node} connected={this.props.connected} />
 					</div>
 					<div
 						style={{
@@ -88,7 +111,7 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 						 top: this.props.size/2
 					 }}
 						>
-						<PortWidget name={'in-n'  } direction="In" node={this.props.node} />
+						<PortWidget name={'in-n'  } direction="In" node={this.props.node} connected={this.props.connected}/>
 					</div>
 			</div>
 			)
@@ -127,7 +150,9 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 				style={{ position: 'relative', width: this.props.size, height: this.props.size }}
 			>
 				<svg width="150" height="150" dangerouslySetInnerHTML={this.createMarkup()} />
-				{this.props.node.selected ? (console.log(this.state.data),<SelectedBlock
+				{this.props.node.selected ? (
+					//console.log(this.state.data),
+					<SelectedBlock
 					pos={this.props.node.mouse}
 					connectors={this.props.node.data.connected}
 					/>)
@@ -145,9 +170,11 @@ export class DiamonNodeWidget extends React.Component<DiamonNodeWidgetProps, Dia
 DiamonNodeWidget.defaultProps = {
 	size: 128,
 	selected:false,
+	connected: false,
 	data: [],
 	node: null,
-	mouse: {}
+	mouse: {},
+	type: '',
 	// name: "a Name"
 };
 export var DiamonNodeWidgetFactory = React.createFactory(DiamonNodeWidget);

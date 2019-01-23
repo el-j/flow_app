@@ -81,9 +81,10 @@ body {
 }
 
 .storm-diagrams-canvas .port {
-	width: 15px;
-	height: 15px;
-	background: rgba(255, 255, 255, 0.1);
+	width: 32px;
+	height: inherit;
+	background: rgba(133, 148, 37, 1);
+	border-bottom: 2px solid rgb(0,0,0);
 }
 
 .storm-diagrams-canvas .port.selected,
