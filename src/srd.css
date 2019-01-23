@@ -6,7 +6,7 @@ body {
 	position: relative;
 	flex-grow: 1;
 	display: flex;
-	cursor: move;
+	cursor: auto;
 	overflow: hidden;
 	height: 800px;
 	background-color: rgb(60, 60, 60);
@@ -81,14 +81,45 @@ body {
 }
 
 .storm-diagrams-canvas .port {
-	width: 15px;
-	height: 15px;
-	background: rgba(255, 255, 255, 0.1);
+	width: 32px;
+	height: inherit;
+	cursor: auto;
+	background: rgba(33, 33, 33, 1);
+	border-bottom: 2px solid rgb(0,0,0);
 }
 
 .storm-diagrams-canvas .port.selected,
 .storm-diagrams-canvas .port:hover {
 	background: #c0ff00;
+}
+
+.storm-diagrams-canvas .portswitch {
+	margin-top: -2px;
+	width: 16px;
+	height: inherit;
+	background: rgba(169, 42, 22, 1);
+	border-bottom: 2px solid rgb(0,0,0);
+}
+
+.storm-diagrams-canvas .portswitch.selected,
+.storm-diagrams-canvas .portswitch:hover {
+	background: #c0ff00;
+}
+
+.storm-diagrams-canvas .portswitch.connected.in,
+.storm-diagrams-canvas .portswitch.out {
+	position: absolute;
+	left: 0;
+}
+
+.storm-diagrams-canvas .portswitch.connected.out,
+.storm-diagrams-canvas .portswitch.in {
+	position: absolute;
+	left: 16px;
+}
+
+.storm-diagrams-canvas .portswitch.connected {
+	background: rgba(133, 148, 37, 1);
 }
 
 .storm-diagrams-canvas .basic-node {
@@ -130,6 +161,7 @@ body {
 
 .storm-diagrams-canvas .basic-node .ports {
 	display: flex;
+	cursor: auto;
 	background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
 }
 
@@ -180,4 +212,23 @@ body {
 	border-radius: 5px;
 	margin-bottom: 2px;
 	cursor: pointer;
+}
+
+.storm-diagrams-canvas .diamond-node .flowBlock {
+	position: absolute;
+	display: block;
+	/* left: 32px; */
+	width: 128px;
+	/* margin-top: -2px; */
+	height: 100%;
+	line-height: 128px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.storm-diagrams-canvas .diamond-node .flowBlock > p {
+	display: inline-block;
+	vertical-align: middle;
+	line-height: normal;
+	word-break: break-all;
 }
