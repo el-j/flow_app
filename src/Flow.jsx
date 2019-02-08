@@ -147,6 +147,8 @@ class Flow extends React.Component {
 	}
 
 	addNewBlock(e){
+	
+		console.log(this.state.data);
 
 		var points = this.engine.getRelativeMousePoint(e);
 		// var nodesCount = _.keys(this.engine.getDiagramModel().getNodes()).length;
@@ -220,17 +222,17 @@ class Flow extends React.Component {
 		}
 		else {
 				this.setState({err: {show: true, message:'no data, please load file'}})
-				// var nodesCount = _.keys(this.engine.getDiagramModel().getNodes()).length;
-				// var node = null;
-				// node = new DiamondNodeModel(this.state.addBarInput, 'rgb(255,0,255)',this.state.data,this.state.selected,this.state.mouse);
-				// var points = this.engine.getRelativeMousePoint(e);
-				// node.addPort(new DiamondPortModel('in-n', 'In'));
-				// node.addPort(new DiamondPortModel('out-n', 'Out'));
-				//
-				// node.x = points.x;
-				// node.y = points.y;
-				// this.engine.getDiagramModel().addNode(node);
-				// this.forceUpdate();
+				var nodesCount = _.keys(this.engine.getDiagramModel().getNodes()).length;
+				var node = null;
+				node = new DiamondNodeModel(this.state.addBarInput, 'rgb(179,179,179)',this.state.data,this.state.selected,this.state.mouse);
+				var points = this.engine.getRelativeMousePoint(e);
+				node.addPort(new DiamondPortModel(true,'in-'+1, 'In','in-'+1,false));
+				node.addPort(new DiamondPortModel(false,'out-'+1, 'Out', 'out-'+1,false ));
+
+				node.x = points.x;
+				node.y = points.y;
+				this.engine.getDiagramModel().addNode(node);
+				this.forceUpdate();
 			}
 		}
 
@@ -268,15 +270,21 @@ class Flow extends React.Component {
 			console.log(connected);
 			connected = {}
 		}
-		// console.log("targetName - switch case",test, 'classname', isClass, toType(isClass));
 		if (classType === 'string') {
-
+			console.log("targetName - switch case",test, 'classname', isClass, toType(isClass));
 			if (isClass.includes('submitChangesButton')) {
 				// console.log('handleFormSubmit now');
+				this.setState({notSvg:false, addNew:false, selected:true})
 				this.handleFormSubmit(e)
 			}
 			if (isClass.includes('chooser')) {
 				this.setState({notSvg:false, addNew:false, selected:false})
+			}
+			if (isClass.includes('addBar')) {
+				this.setState({notSvg:false, addNew:true, selected:false})
+			}
+			else {
+				this.setState({notSvg:false, addNew:false, selected:true})
 			}
 		}
 		else {
